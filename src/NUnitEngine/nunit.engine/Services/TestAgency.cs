@@ -275,44 +275,7 @@ namespace NUnit.Engine.Services
 
         private void OnAgentExit(object sender, EventArgs e)
         {
-            var process = sender as Process;
-            if (process == null)
-                return;
-
-            var agentRecord = _agentData.GetDataForProcess(process);
-            agentRecord.Status = AgentStatus.Terminated;
-
-            string errorMsg;
-
-            switch (process.ExitCode)
-            {
-                case AgentExitCodes.OK:
-                    return;
-                case AgentExitCodes.PARENT_PROCESS_TERMINATED:
-                    errorMsg = "Remote test agent believes agency process has exited.";
-                    break;
-                case AgentExitCodes.UNEXPECTED_EXCEPTION:
-                    errorMsg = "Unhandled exception on remote test agent. " +
-                               "To debug, try running with the --inprocess flag, or using --trace=debug to output logs.";
-                    break;
-                case AgentExitCodes.FAILED_TO_START_REMOTE_AGENT:
-                    errorMsg = "Failed to start remote test agent.";
-                    break;
-                case AgentExitCodes.DEBUGGER_SECURITY_VIOLATION:
-                    errorMsg = "Debugger could not be started on remote agent due to System.Security.Permissions.UIPermission not being set.";
-                    break;
-                case AgentExitCodes.DEBUGGER_NOT_IMPLEMENTED:
-                    errorMsg = "Debugger could not be started on remote agent as not available on platform.";
-                    break;
-                case AgentExitCodes.UNABLE_TO_LOCATE_AGENCY:
-                    errorMsg = "Remote test agent unable to locate agency process.";
-                    break;
-                default:
-                    errorMsg = $"Remote test agent exited with non-zero exit code {process.ExitCode}";
-                    break;
-            }
-
-            throw new NUnitEngineException(errorMsg);
+            throw new InvalidCastException();
         }
 
         public IServiceLocator ServiceContext { get; set; }
